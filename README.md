@@ -2,7 +2,7 @@
 
 A break beam triggered sound effect system.
 
-This code should work without modifcation on any ATMEGA328-based Arduino board, like the Uno, Nano, or Arduino Pro Mini. It might need so modification for other Arduino-compatible boards. I developed and tested this code on a pair of Duemilanove boards.
+This code should work without modifcation on any ATMEGA328-based Arduino board, like the Uno, Nano, or Arduino Pro Mini. It might need some modification for other Arduino-compatible boards. I developed and tested this code on a pair of Duemilanove boards.
 
 ## The Beamer
 
