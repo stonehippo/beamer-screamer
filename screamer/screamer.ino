@@ -8,11 +8,22 @@
  * trigger different sounds based on the content of the signal.
  */
 
+#include <SoftwareSerial.h>
+
 #define SOUND_TRIGGER 9 // the pin attached to a trigger on the sound FX board
- 
+#define SOFT_SERIAL_RX 10
+#define SOFT_SERIAL_TX 11
+
+SoftwareSerial beamer(SOFT_SERIAL_RX, SOFT_SERIAL_TX); 
+
 void setup() {
   Serial.begin(9600);
-    pinMode(LED_BUILTIN, OUTPUT);
+
+  pinMode(SOFT_SERIAL_RX, INPUT);
+  pinMode(SOFT_SERIAL_TX, OUTPUT);
+  beamer.begin(9600);
+  
+  pinMode(LED_BUILTIN, OUTPUT);
 
   // set up the pin for the sound trigger, including pulling it high
   pinMode(SOUND_TRIGGER, OUTPUT);
@@ -21,9 +32,11 @@ void setup() {
 
 void loop() {
   // listen for the signal on serial, and act if we have a message
-  if(Serial.available() > 0) {
-    byte message = Serial.read();
+  if(beamer.available() > 0) {
+    byte message = beamer.read();
+    
     if(parse_trigger(message)) {
+      Serial.println("Triggering sound!");
       digitalWrite(LED_BUILTIN, HIGH);
       trigger_sound();
       digitalWrite(LED_BUILTIN, LOW);
@@ -49,6 +62,7 @@ void loop() {
  */
 bool parse_trigger(byte message) {
   if (message == 0x01) {
+    Serial.println("Got message 0x01");
     return true;
   }
   return false;
@@ -57,6 +71,6 @@ bool parse_trigger(byte message) {
 // fire off the sound
 void trigger_sound() {
   digitalWrite(SOUND_TRIGGER, LOW);
-  delay(100);
+  delay(150);
   digitalWrite(SOUND_TRIGGER, HIGH);
 }
